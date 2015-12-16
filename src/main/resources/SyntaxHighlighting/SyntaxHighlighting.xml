@@ -128,42 +128,6 @@ define(['jquery'], function ($) {
   var codeMirrors = [];
   var theme = 'default';
 
-  /* Initialize the CodeMirror library and then start registering the extra modules. */
-  var initCodeMirrorInternals = function(configTheme) {
-    if(configTheme) {
-      theme = configTheme;
-    }
-    initCodeMirrors();
-
-    // Override the insertTags method for the wiki syntax editor so that we can intercept commands from
-    // the attached toolbar and execute them on the CodeMirror instance instead of the simple textarea
-    if (XWiki.editor == 'wiki' &amp;&amp; insertTags) {
-      insertTags = function(tagOpen, tagClose, sampleText) {
-        var codeMirror = codeMirrors[0];
-        if (!codeMirror) {
-          return;
-        }
-        codeMirror.replaceSelection(tagOpen + (codeMirror.doc.getSelection() || sampleText) + tagClose, 'end');
-      }
-    }
-  }
-
-  /* Initialize all possible CodeMirror instances. */
-  var initCodeMirrors = function () {
-    if (XWiki.editor == 'object' || XWiki.editor == 'inline') {
-      // Object editor highlighting support
-      initCodeMirror("textarea[id^='XWiki.StyleSheetExtension_'][id$='_code']", 'css');
-      initCodeMirror("textarea[id^='XWiki.JavaScriptExtension_'][id$='_code']", 'javascript');
-      initCodeMirror("textarea[id^='XWiki.XWikiSkins_'][id$='.css']", 'css');
-      initCodeMirror("textarea[id^='XWiki.XWikiSkins_'][id$='.js']", 'javascript');
-      initCodeMirror("textarea[id^='XWiki.XWikiSkins_'][id$='.vm']", 'velocity');
-      initCodeMirror("textarea[id^='XWiki.WikiMacroClass_'][id$='_code']", XWiki.docsyntax);
-    } else if (XWiki.editor == 'wiki') {
-      // Document content editor highlighting support using the document's syntax.
-      initCodeMirror("textarea[id='content']", XWiki.docsyntax);
-    }
-  }
-
   /**
    * Initialize a CodeMirror instance and add it to the list of instances.
    * @param propertyPattern : the CSS selector for the textarea to wrap with a CodeMirror instance.
@@ -538,8 +502,14 @@ define(['jquery'], function ($) {
     editorDiv.CodeMirror.refresh();
   });
 
+  /* Change the theme used by CodeMirror */
+  var setTheme = function(newTheme) {
+    theme = newTheme;
+  }
+
   return {
-    initCodeMirrorInternals : initCodeMirrorInternals,
+    codeMirrors : codeMirrors,
+    setTheme : setTheme,
     initCodeMirror : initCodeMirror
   }
 });</code>
