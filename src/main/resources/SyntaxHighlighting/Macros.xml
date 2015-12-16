@@ -43,10 +43,6 @@
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content>{{velocity output="false"}}
-#set ($configurationClass = 'SyntaxHighlighting.ConfigurationClass')
-#set ($configurationDocument = $xwiki.getDocument('SyntaxHighlighting.Configuration'))
-#set ($configuration = $configurationDocument.getObject($configurationClass))
-
 ## Always ending in '/', remember not to add it twice.
 #set ($codeMirrorBaseURL = $services.webjars.url('codemirror', ''))
 #if ($codeMirrorBaseURL.contains('?'))
